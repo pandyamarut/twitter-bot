@@ -5,7 +5,7 @@ var T = new Twitter(config);
 
 // set up params which we will return.
 var params = {
-  q: '#nodejs',
+  q: 'any hashtag you want to search',
   count: 10,
   result_type: 'recent',
   lang: 'en'
@@ -13,26 +13,18 @@ var params = {
 
 // plugging search params to GET requests to search for the tweets.
 
+
+// Initiate your search using the above paramaters
 T.get('search/tweets', params, function(err, data, response) {
   // If there is no error, proceed
   if(!err){
     // Loop through the returned tweets
     for(let i = 0; i < data.statuses.length; i++){
       // Get the tweet Id from the returned data
-      let id = { id: data.statuses[i].id_str }
+      let id =  data.statuses[i].id_str
       // Try to Favorite the selected Tweet
-      T.post('favorites/create', id, function(err, response){
-        // If the favorite fails, log the error message
-        if(err){
-          console.log(err[0].message);
-        }
-        // If the favorite is successful, log the url of the tweet
-        else{
-          let username = response.user.screen_name;
-          let tweetId = response.id_str;
-          console.log('Favorited: ', `https://twitter.com/${username}/status/${tweetId}`)
-        }
-      });
+      let username = data.statuses[i].user.screen_name;
+      console.log('tweet: ', `https://twitter.com/${username}/status/${id}`)
     }
   } else {
     console.log(err);
